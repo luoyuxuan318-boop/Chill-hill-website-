@@ -524,11 +524,11 @@ sections_html += '''
 </div>
 <div class="info-block">
   <div class="info-row"><span class="info-label">品牌名称</span><span class="info-value">秋山社</span><span class="info-value" style="color:#6b5e4a;font-size:12px;margin-left:4px;">Chill Hill</span></div>
-  <div class="info-row"><span class="info-label">品牌行业</span><span class="info-value">以咖啡为基底的生活方式品牌</span></div>
+  <div class="info-row"><span class="info-label">品牌行业</span><span class="info-value">以咖啡、音乐、精酿为基底的生活方式品牌</span></div>
   <div class="info-row"><span class="info-label">品牌定位</span><span class="info-value">松弛、有度治愈</span></div>
   <div class="info-row"><span class="info-label">品牌调性</span><div class="info-kw"><span>克制</span><span>自然</span><span>温度</span><span>呼吸感</span><span>东方美学</span></div></div>
   <hr class="info-divider">
-  <div class="info-intro">秋山社（Chill Hill）是一个以咖啡为基底的生活方式品牌。源于山林之间的宁静，我们希望创造一个能让情绪自然流动的空间。透过咖啡、简餐与民谣，让我们重新连接日常中的松弛感。</div>
+  <div class="info-intro">秋山社（Chill Hill）是一个以咖啡、音乐、精酿为基底的生活方式品牌。源于山林之间的宁静，我们希望创造一个能让情绪自然流动的空间。透过咖啡、简餐与民谣，让我们重新连接日常中的松弛感。</div>
   <div class="info-slogan"><div class="cn">秋山有度，情绪无束</div><div class="en">Chill by the hill, free to feel.</div></div>
 </div>
 '''
@@ -545,8 +545,8 @@ sections_html += f'''
 </div>
 <div class="brand-block">
   <div class="brand-name">秋山社<span class="en">Chill Hill</span></div>
-  <div class="meta-row"><span>以咖啡为基底的生活方式品牌</span><span>松弛、有度治愈</span><span>克制</span><span>自然</span></div>
-  <div class="brand-intro">秋山社（Chill Hill）是一个以咖啡为基底的生活方式品牌。源于山林之间的宁静，我们希望创造一个能让情绪自然流动的空间。咖啡不是终点，而是通往松弛感的起点。透过咖啡、简餐与民谣，我们重新连接日常中的松弛感。</div>
+  <div class="meta-row"><span>以咖啡、音乐、精酿为基底的生活方式品牌</span><span>松弛、有度治愈</span><span>克制</span><span>自然</span></div>
+  <div class="brand-intro">秋山社（Chill Hill）是一个以咖啡、音乐、精酿为基底的生活方式品牌。源于山林之间的宁静，我们希望创造一个能让情绪自然流动的空间。咖啡不是终点，而是通往松弛感的起点。透过咖啡、简餐与民谣，我们重新连接日常中的松弛感。</div>
   <div class="brand-slogan">秋山有度，情绪无束</div>
 </div>
 <div class="tone-box">
