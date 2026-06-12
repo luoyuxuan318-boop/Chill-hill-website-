@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>秋山社 · 品牌视觉手册</title>
+<link rel="preload" as="image" href="images/header-bg.jpg">
+<link rel="preload" as="image" href="images/logo.png">
 <style>
   :root {
     --bg: #f9f6f0; --card-bg: #fff; --text: #2c2416; --text-light: #6b5e4a;
@@ -161,7 +163,7 @@
 
 <main class="main">
   <div class="main-header">
-    <h1><img src="images/logo.png" alt="logo" class="header-logo">秋山社 · 品牌视觉手册</h1>
+    <h1><img src="images/logo.png" alt="logo" class="header-logo" fetchpriority="high" decoding="sync">秋山社 · 品牌视觉手册</h1>
     <div class="en">Brand Visual Handbook</div>
   </div>
   <div class="content-area" id="contentArea"></div>
@@ -329,12 +331,32 @@ function platformClass(src) {
   return 'platform-website';
 }
 
+// Section DOM cache — keep rendered panels in DOM so images persist across navigation
+var themeCache = {};
+
+function setThemeContent(id, html) {
+  var area = document.getElementById('contentArea');
+  if (themeCache[id]) {
+    for (var k in themeCache) { themeCache[k].style.display = 'none'; }
+    themeCache[id].style.display = '';
+    area.scrollTop = 0;
+    return;
+  }
+  // First render for this theme: create panel
+  if (Object.keys(themeCache).length === 0) { area.innerHTML = ''; }
+  var panel = document.createElement('div');
+  panel.className = 'theme-panel';
+  panel.innerHTML = html;
+  for (var k in themeCache) { themeCache[k].style.display = 'none'; }
+  area.appendChild(panel);
+  themeCache[id] = panel;
+  area.scrollTop = 0;
+}
+
 function renderTheme(id) {
   var t = null;
   for (var i = 0; i < themes.length; i++) { if (themes[i].id === id) { t = themes[i]; break; } }
   if (!t) return;
-
-  var area = document.getElementById('contentArea');
 
   // Brand Info special section
   if (t.type === 'brand-info') {
@@ -342,7 +364,7 @@ function renderTheme(id) {
     for (var ki = 0; ki < t.keywords.length; ki++) {
       kwHtml += '<span>' + t.keywords[ki] + '</span>';
     }
-    area.innerHTML = ''
+    var html = ''
       + '<div class="theme-header">'
       + '<div class="theme-title">' + t.num + '　' + t.label + '</div>'
       + '<div class="theme-desc">' + t.desc + '</div>'
@@ -359,6 +381,7 @@ function renderTheme(id) {
       + '<div class="info-slogan"><div class="cn">' + t.sloganCn + '</div><div class="en">' + t.sloganEn + '</div></div>'
       + '</div>'
       + '</div>';
+    setThemeContent(id, html);
     return;
   }
 
@@ -373,12 +396,12 @@ function renderTheme(id) {
     for (var si = 0; si < t.spaceImages.length; si++) {
       html += '<div class="our-card">'
         + '<div class="img-wrap" data-img="' + t.spaceImages[si].img + '" data-info="空间与氛围 — 图片 ' + (si + 1) + '">'
-        + '<img src="' + t.spaceImages[si].img + '" alt="空间 ' + (si + 1) + '" loading="lazy" onerror="this.style.display=\'none\';">'
+        + '<img src="' + t.spaceImages[si].img + '" alt="空间 ' + (si + 1) + '" loading="lazy" decoding="async" onerror="this.style.display=\'none\';">'
         + '</div>'
         + '</div>';
     }
     html += '</div>';
-    area.innerHTML = html;
+    setThemeContent(id, html);
     return;
   }
 
@@ -400,13 +423,13 @@ function renderTheme(id) {
     for (var mi = 0; mi < t.moodImages.length; mi++) {
       html += '<div class="our-card">'
         + '<div class="img-wrap" data-img="' + t.moodImages[mi] + '" data-info="情绪版 ' + (mi + 1) + '">'
-        + '<img src="' + t.moodImages[mi] + '" alt="情绪版 ' + (mi + 1) + '" loading="lazy" onerror="this.style.display=\'none\';">'
+        + '<img src="' + t.moodImages[mi] + '" alt="情绪版 ' + (mi + 1) + '" loading="lazy" decoding="async" onerror="this.style.display=\'none\';">'
         + '</div>'
         + '</div>';
     }
     html += '</div>'
       + '</div>';
-    area.innerHTML = html;
+    setThemeContent(id, html);
     return;
   }
 
@@ -425,7 +448,7 @@ function renderTheme(id) {
         + '<div class="system-item-label">' + t.systemImages[si].label + '</div>'
         + '<div class="our-card">'
         + '<div class="img-wrap" data-img="' + t.systemImages[si].img + '" data-info="包装系统 — ' + t.systemImages[si].label + '">'
-        + '<img src="' + t.systemImages[si].img + '" alt="' + t.systemImages[si].label + '" loading="lazy" onerror="this.style.display=\'none\';">'
+        + '<img src="' + t.systemImages[si].img + '" alt="' + t.systemImages[si].label + '" loading="lazy" decoding="async" onerror="this.style.display=\'none\';">'
         + '</div>'
         + '</div>'
         + '</div>';
@@ -439,7 +462,7 @@ function renderTheme(id) {
         var oo = t.ours[jj];
         ourHtml2 += '<div class="our-card">'
           + '<div class="img-wrap" data-img="' + oo.img + '" data-info="秋山有度 — ' + oo.title + '">'
-          + '<img src="' + oo.img + '" alt="' + oo.title + '" loading="lazy" onerror="this.style.display=\'none\'">'
+          + '<img src="' + oo.img + '" alt="' + oo.title + '" loading="lazy" decoding="async" onerror="this.style.display=\'none\'">'
           + '</div>'
           + '<div class="info"><div class="title">' + oo.title + '</div><div class="sub">' + oo.sub + '</div></div>'
           + '</div>';
@@ -449,7 +472,7 @@ function renderTheme(id) {
         + '<div class="our-grid">' + ourHtml2 + '</div>'
         + '</div>';
     }
-    area.innerHTML = sysHtml;
+    setThemeContent(id, sysHtml);
     return;
   }
 
@@ -459,14 +482,13 @@ function renderTheme(id) {
     var o = t.ours[j];
     ourHtml += '<div class="our-card">'
       + '<div class="img-wrap" data-img="' + o.img + '" data-info="秋山有度 — ' + o.title + '">'
-      + '<img src="' + o.img + '" alt="' + o.title + '" loading="lazy" onerror="this.style.display=\'none\'">'
+      + '<img src="' + o.img + '" alt="' + o.title + '" loading="lazy" decoding="async" onerror="this.style.display=\'none\'">'
       + '</div>'
       + '<div class="info"><div class="title">' + o.title + '</div><div class="sub">' + o.sub + '</div></div>'
       + '</div>';
   }
 
-  var area = document.getElementById('contentArea');
-  area.innerHTML = ''
+  var html = ''
     + '<div class="theme-header">'
     + '<div class="theme-title">' + t.num + '　' + t.label + '</div>'
     + '<div class="theme-desc">' + t.desc + '</div>'
@@ -476,7 +498,7 @@ function renderTheme(id) {
       + '<div class="our-label"><div class="dot"></div><span>' + t.overview.label + '</span></div>'
       + '<div class="our-grid"><div class="our-card">'
       + '<div class="img-wrap" data-img="' + t.overview.img + '" data-info="' + t.overview.label + '">'
-      + '<img src="' + t.overview.img + '" alt="' + t.overview.label + '" loading="lazy" onerror="this.style.display=\'none\';">'
+      + '<img src="' + t.overview.img + '" alt="' + t.overview.label + '" loading="lazy" decoding="async" onerror="this.style.display=\'none\';">'
       + '</div>'
       + '</div></div>'
       + '</div>' : '')
@@ -484,6 +506,7 @@ function renderTheme(id) {
     + '<div class="our-label"><div class="dot"></div><span>秋山 · 现有设计</span><div class="tag">OURS</div></div>'
     + '<div class="our-grid">' + ourHtml + '</div>'
     + '</div>';
+  setThemeContent(id, html);
 }
 
 // Delegated zoom handler for all images
