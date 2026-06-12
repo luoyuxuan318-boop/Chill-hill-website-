@@ -1,0 +1,17 @@
+# Generated / temp files
+print.html
+*.pyc
+__pycache__/
+.DS_Store
+
+# Scratch / working files
+图层*.png
+未标题*.png
+
+# Python virtualenv
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/

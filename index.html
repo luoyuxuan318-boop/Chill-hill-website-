@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>秋山社 · 品牌视觉手册</title>
+<style>
+  :root {
+    --bg: #f9f6f0; --card-bg: #fff; --text: #2c2416; --text-light: #6b5e4a;
+    --accent: #8b6f47; --accent-light: #c4a97a; --gold: #b8973e;
+    --sidebar-bg: #2c2416; --sidebar-text: #c4b89a; --sidebar-active: #e8d5b0;
+    --our-border: #b8973e; --ref-bg: #f5f1ea;
+    --shadow: 0 2px 16px rgba(0,0,0,0.06);
+    --radius: 10px; --font: 'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--font); background:var(--bg); color:var(--text); display:flex; height:100vh; overflow:hidden; }
+
+  /* Sidebar */
+  .sidebar { width:200px; min-width:200px; background:var(--sidebar-bg); display:flex; flex-direction:column; z-index:10; }
+  .sidebar-header { padding:24px 18px 14px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.06); flex-shrink:0; }
+  .sidebar-header .brand { font-size:15px; color:var(--sidebar-active); font-weight:700; letter-spacing:2px; white-space:nowrap; }
+  
+  .sidebar-header .label { font-size:9px; color:var(--sidebar-text); margin-top:8px; opacity:0.5; letter-spacing:3px; text-transform:uppercase; }
+  .sidebar-nav { flex:1; overflow-y:auto; padding:6px 0; }
+  .sidebar-nav::-webkit-scrollbar { width:3px; }
+  .sidebar-nav::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:3px; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:11px 20px; cursor:pointer; color:var(--sidebar-text); font-size:12.5px; transition:all 0.2s; border-left:3px solid transparent; user-select:none; letter-spacing:1px; }
+  .nav-item:hover { background:rgba(255,255,255,0.04); color:#e0d5c0; }
+  .nav-item.active { background:rgba(255,255,255,0.08); color:var(--sidebar-active); border-left-color:var(--sidebar-active); font-weight:600; }
+  .nav-item .num { font-size:9px; width:16px; text-align:center; opacity:0.5; font-weight:400; }
+  .nav-item.active .num { opacity:1; }
+
+  /* Main */
+  .main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+  .main-header { padding:24px 36px; text-align:center; flex-shrink:0; border-bottom:1px solid rgba(0,0,0,0.05); background:rgba(255,255,255,0.3); backdrop-filter:blur(10px); position:relative; overflow:hidden; }
+    .main-header::before { content:''; position:absolute; inset:0; background:url('images/header-bg.jpg') center/cover no-repeat; opacity:0.3; z-index:0; pointer-events:none; }
+    .main-header > * { position:relative; z-index:1; }
+  .main-header .header-logo { height:44px; vertical-align:middle; margin-right:8px; }
+    .main-header h1 { font-size:22px; font-weight:700; letter-spacing:6px; color:var(--text); }
+  .main-header .en { font-size:10px; color:var(--text-light); margin-top:3px; letter-spacing:3px; text-transform:uppercase; }
+  .content-area { flex:1; overflow-y:auto; padding:28px 32px 48px; }
+  .content-area::-webkit-scrollbar { width:6px; }
+  .content-area::-webkit-scrollbar-thumb { background:rgba(0,0,0,0.1); border-radius:3px; }
+
+  /* Section headers */
+  .theme-header { margin-bottom:28px; }
+  .theme-title { font-size:20px; font-weight:700; color:var(--text); letter-spacing:3px; }
+  .theme-desc { font-size:12px; color:var(--text-light); margin-top:4px; padding-bottom:18px; border-bottom:1px solid rgba(0,0,0,0.06); }
+
+  /* Our Design Section */
+  .our-section { margin-bottom:36px; }
+  .our-label { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .our-label .dot { width:8px; height:8px; background:var(--gold); border-radius:50%; }
+  .our-label span { font-size:13px; font-weight:700; color:var(--accent); letter-spacing:2px; }
+  .our-label .tag { font-size:10px; background:var(--sidebar-bg); color:var(--sidebar-active); padding:2px 10px; border-radius:3px; letter-spacing:1px; }
+  .our-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:16px; }
+  .our-card { background:var(--card-bg); border:2px dashed var(--accent-light); border-radius:var(--radius); overflow:hidden; transition:transform 0.2s, box-shadow 0.2s; }
+  .our-card:hover { transform:translateY(-2px); box-shadow:0 6px 24px rgba(139,111,71,0.12); border-color:var(--accent); }
+  .our-card .img-wrap { width:100%; aspect-ratio:4/3; background:linear-gradient(135deg, #f5f0e8 0%, #ede6d8 100%); display:flex; align-items:center; justify-content:center; cursor:zoom-in; position:relative; }
+  .our-card .img-wrap img { width:100%; height:100%; object-fit:cover; }
+  .our-card .img-wrap .hint { position:absolute; bottom:12px; left:12px; background:rgba(0,0,0,0.6); color:#ffd700; font-size:10px; padding:4px 8px; border-radius:3px; letter-spacing:1px; }
+  .our-card .info { padding:12px 14px; }
+  .our-card .info .title { font-size:13px; font-weight:700; color:var(--text); }
+  .our-card .info .sub { font-size:11px; color:var(--text-light); margin-top:2px; line-height:1.5; }
+
+  .tone-desc-line { font-size:13px; color:var(--text); line-height:1.6; margin:0 0 6px 0; }
+  .tone-desc-line:last-child { margin-bottom:0; }
+
+  /* Brand Tone Section */
+  .brand-tone .brand-intro-block { background:var(--card-bg); border-radius:var(--radius); padding:28px 32px; box-shadow:var(--shadow); margin-bottom:24px; }
+  .brand-tone .brand-intro-block .brand-name { font-size:24px; font-weight:700; color:var(--text); letter-spacing:4px; }
+  .brand-tone .brand-intro-block .brand-name .en { font-size:14px; font-weight:400; color:var(--text-light); letter-spacing:2px; margin-left:12px; }
+  .brand-tone .brand-intro-block .brand-meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .brand-tone .brand-intro-block .brand-meta .meta-item { font-size:11px; color:var(--accent); background:rgba(139,111,71,0.08); padding:4px 12px; border-radius:14px; letter-spacing:1px; }
+  .brand-tone .brand-intro-block .brand-desc { font-size:13px; color:var(--text); line-height:1.9; margin-top:18px; padding-top:18px; border-top:1px solid rgba(0,0,0,0.05); }
+  .brand-tone .brand-intro-block .brand-slogan { font-size:16px; font-weight:700; color:var(--accent); letter-spacing:3px; margin-top:12px; text-align:right; }
+
+  .brand-tone .tone-text { background:var(--ref-bg); border-radius:var(--radius); padding:24px 28px; }
+  .brand-tone .tone-text .tone-title { font-size:14px; font-weight:700; color:var(--text); letter-spacing:2px; margin-bottom:10px; }
+  .brand-tone .tone-text .tone-body { font-size:12px; color:var(--text-light); line-height:1.8; }
+  .brand-tone .tone-text .tone-keywords { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .brand-tone .tone-text .tone-keywords span { font-size:11px; padding:4px 14px; border-radius:12px; background:rgba(139,111,71,0.1); color:var(--accent); letter-spacing:1px; }
+
+  .system-item { display:flex; flex-direction:column; gap:10px; }
+  .system-item .system-item-label { font-size:13px; color:var(--accent); letter-spacing:2px; font-weight:700; }
+
+
+  /* Brand Info Section */
+  .brand-info { max-width:860px; }
+  .brand-info .info-card { background:var(--card-bg); border-radius:var(--radius); padding:32px 36px; box-shadow:var(--shadow); margin-bottom:20px; }
+  .brand-info .info-card .info-row { display:flex; align-items:baseline; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+  .brand-info .info-card .info-row:last-child { margin-bottom:0; }
+  .brand-info .info-card .info-label { font-size:12px; color:var(--accent); font-weight:600; letter-spacing:2px; min-width:80px; flex-shrink:0; }
+  .brand-info .info-card .info-value { font-size:14px; color:var(--text); letter-spacing:1px; line-height:1.6; }
+  .brand-info .info-card .info-value.en { font-size:12px; color:var(--text-light); letter-spacing:1px; }
+  .brand-info .info-card .info-kw { display:flex; flex-wrap:wrap; gap:8px; }
+  .brand-info .info-card .info-kw span { font-size:11px; padding:4px 14px; border-radius:12px; background:rgba(139,111,71,0.08); color:var(--accent); letter-spacing:1px; }
+  .brand-info .info-card .info-divider { border:none; border-top:1px solid rgba(0,0,0,0.05); margin:16px 0; }
+  .brand-info .info-card .info-intro { font-size:13px; color:var(--text); line-height:1.9; }
+  .brand-info .info-card .info-slogan { margin-top:16px; text-align:right; }
+  .brand-info .info-card .info-slogan .cn { font-size:16px; font-weight:700; color:var(--accent); letter-spacing:3px; }
+  .brand-info .info-card .info-slogan .en { font-size:11px; color:var(--text-light); letter-spacing:2px; margin-top:2px; }
+
+  /* Divider */
+  .section-divider { display:flex; align-items:center; gap:14px; margin:32px 0 20px; }
+  .section-divider .line { flex:1; height:1px; background:rgba(0,0,0,0.08); }
+  .section-divider span { font-size:10px; color:var(--text-light); letter-spacing:2px; white-space:nowrap; opacity:0.6; }
+
+  /* Reference Section */
+  .ref-label { font-size:12px; color:var(--text-light); letter-spacing:2px; margin-bottom:16px; font-weight:500; }
+  .cards-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:14px; }
+  .card { background:var(--ref-bg); border-radius:var(--radius); overflow:hidden; transition:transform 0.2s, box-shadow 0.2s; }
+  .card:hover { transform:translateY(-2px); box-shadow:0 4px 16px rgba(0,0,0,0.08); }
+  .card .img-wrap { width:100%; aspect-ratio:4/3; overflow:hidden; cursor:zoom-in; background:#e8e4df; position:relative; }
+  .card .img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s; }
+  .card .img-wrap:hover img { transform:scale(1.05); }
+  .card .img-wrap .zoom-hint { position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.5); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; opacity:0; transition:opacity 0.2s; }
+  .card .img-wrap:hover .zoom-hint { opacity:1; }
+  .card .body { padding:12px 14px; }
+  .card .store { font-size:13px; font-weight:700; color:var(--text); }
+  .card .platform { display:inline-block; font-size:9px; padding:2px 7px; border-radius:3px; margin:4px 0 6px; font-weight:500; }
+  .platform-red { background:#ffe0e0; color:#c04040; } .platform-purple { background:#f0e0ff; color:#7b3fa3; }
+  .platform-website { background:#e0ecff; color:#3b5fa0; } .platform-dezeen { background:#e8e8e8; color:#333; }
+  .platform-douyin { background:#e0e0e0; color:#333; }
+  .card .desc { font-size:11px; color:var(--text-light); line-height:1.5; }
+  .card .tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; }
+  .card .tags span { font-size:9px; padding:2px 7px; border-radius:8px; background:rgba(139,111,71,0.1); color:var(--accent); }
+
+  /* Modal */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:1000; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.3s; }
+  .modal-overlay.active { opacity:1; pointer-events:auto; }
+  .modal-content { position:relative; max-width:90vw; max-height:90vh; display:flex; flex-direction:column; align-items:center; }
+  .modal-content img { max-width:90vw; max-height:80vh; object-fit:contain; border-radius:4px; }
+  .modal-info { color:#ccc; font-size:13px; margin-top:12px; text-align:center; }
+  .modal-close { position:absolute; top:-40px; right:0; background:none; border:none; color:#fff; font-size:30px; cursor:pointer; line-height:1; opacity:0.7; }
+  .modal-close:hover { opacity:1; }
+
+  @media (max-width:768px) {
+    body { flex-direction:column; }
+    .sidebar { width:100%; min-width:100%; max-height:120px; flex-shrink:0; }
+    .sidebar-nav { display:flex; overflow-x:auto; overflow-y:hidden; padding:4px 8px; gap:2px; }
+    .nav-item { flex-shrink:0; padding:8px 12px; font-size:11px; border-left:none; border-bottom:2px solid transparent; white-space:nowrap; }
+    .nav-item.active { border-left:none; border-bottom-color:var(--sidebar-active); }
+    .nav-item .num { display:none; }
+    .our-grid { grid-template-columns:1fr; }
+    .cards-grid { grid-template-columns:1fr; }
+    .main-header h1 { font-size:16px; letter-spacing:3px; }
+  }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">秋山有度　情绪无束</div>
+    <div class="label">Chill by the hill, free to feel.</div>
+  </div>
+  <nav class="sidebar-nav" id="sidebarNav"></nav>
+</aside>
+
+<main class="main">
+  <div class="main-header">
+    <h1><img src="images/logo.png" alt="logo" class="header-logo">秋山社 · 品牌视觉手册</h1>
+    <div class="en">Brand Visual Handbook</div>
+  </div>
+  <div class="content-area" id="contentArea"></div>
+</main>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <img id="modalImg" src="" alt="">
+    <div class="modal-info" id="modalInfo"></div>
+  </div>
+</div>
+
+<script>
+// Image helpers — user fills these in
+var OUR = function(name){ return 'images/' + name; };
+
+
+var themes = [
+  {
+    id: 'brand-info', num: '01', label: '品牌信息', type: 'brand-info',
+    desc: '品牌身份 · 核心定位 · 价值主张',
+    brandNameCn: '秋山社',
+    brandNameEn: 'Chill Hill',
+    industry: '以咖啡为基底的生活方式品牌',
+    positioning: '松弛、有度治愈',
+    keywords: ['克制', '自然', '温度', '呼吸感', '东方美学'],
+    sloganCn: '秋山有度，情绪无束',
+    sloganEn: 'Chill by the hill, free to feel.',
+    intro: '秋山社（Chill Hill）是一个以咖啡为基底的生活方式品牌。源于山林之间的宁静，我们希望创造一个能让情绪自然流动的空间。透过咖啡、简餐与民谣，让我们重新连接日常中的松弛感。'
+  },
+  {
+    id: 'tone', num: '02', label: '品牌调性', type: 'brand',
+    desc: '秋山社（Chill Hill）是一个以咖啡为基底的生活方式品牌。源于山林之间的宁静，我们希望创造一个能让情绪自然流动的空间。透过咖啡、简餐与民谣，让我们重新连接日常中的松弛感。',
+    brandName: '秋山社',
+    brandNameEn: 'Chill Hill',
+    industry: '以咖啡为基底的生活方式品牌',
+    positioning: ['松弛、有度治愈', '克制', '自然'],
+    sloganCn: '秋山有度，情绪无束',
+    sloganEn: 'Chill by the hill, free to feel.',
+    intro: '秋山社（Chill Hill）是一个以咖啡为基底的生活方式品牌。源于山林之间的宁静，我们希望创造一个能让情绪自然流动的空间。咖啡不是终点，而是通往松弛感的起点。透过咖啡、简餐与民谣，我们重新连接日常中的松弛感。',
+    moodImages: ['images/moodboard-01.jpg', 'images/moodboard-02.jpg', 'images/moodboard-03.jpg', 'images/moodboard-04.jpg', 'images/moodboard-05.jpg'],
+    moodLabel: '情绪版 / Mood Board',
+    toneKeywords: ['松弛感', '克制', '自然', '温度', '呼吸感', '东方美学']
+  },
+  {
+    id: 'packaging', num: '03', label: '包装系统',
+    desc: '外带杯 · 打包袋 · 餐巾纸 · 杯套 · 封口贴 · 产品包装 —— 品牌触达顾客的第一层肌肤',
+    systemImages: [{label:'系统一：简约设计感', img:'images/packaging-system-01.jpg'}, {label:'系统二：潮流设计感', img:'images/packaging-system-02.jpg'}, {label:'系统三：莫兰迪色极简版', img:'images/packaging-system-03.jpg'}],
+    ours: [
+      { img: OUR('packaging-01.jpg'), title: '外卖杯', sub: '堂食杯 / 外带杯 / 杯套设计' },
+      { img: OUR('packaging-02.jpg'), title: '打包袋与杯托', sub: '外卖袋 / 瓦楞杯托 / 提手设计' },
+      { img: OUR('packaging-03.jpg'), title: '纸巾与封口贴', sub: 'logo纸巾 / 餐垫纸 / 季节封口贴' },
+    ],
+  }
+];
+
+// Render
+function renderSidebar() {
+  var nav = document.getElementById('sidebarNav');
+  var h = '';
+  for (var i = 0; i < themes.length; i++) {
+    h += '<div class="nav-item' + (i === 0 ? ' active' : '') + '" data-id="' + themes[i].id + '">'
+      + '<span class="num">' + themes[i].num + '</span><span>' + themes[i].label + '</span></div>';
+  }
+  nav.innerHTML = h;
+  nav.querySelectorAll('.nav-item').forEach(function(el) {
+    el.addEventListener('click', function() {
+      nav.querySelectorAll('.nav-item').forEach(function(e) { e.classList.remove('active'); });
+      el.classList.add('active');
+      renderTheme(el.dataset.id);
+      document.getElementById('contentArea').scrollTop = 0;
+    });
+  });
+}
+
+function platformClass(src) {
+  if (src.indexOf('小红书') >= 0) return 'platform-red';
+  if (src.indexOf('抖音') >= 0) return 'platform-douyin';
+  if (src.indexOf('Instagram') >= 0) return 'platform-purple';
+  if (src.indexOf('Dezeen') >= 0 || src.indexOf('ArchDaily') >= 0) return 'platform-dezeen';
+  return 'platform-website';
+}
+
+function renderTheme(id) {
+  var t = null;
+  for (var i = 0; i < themes.length; i++) { if (themes[i].id === id) { t = themes[i]; break; } }
+  if (!t) return;
+
+  var area = document.getElementById('contentArea');
+
+  // Brand Info special section
+  if (t.type === 'brand-info') {
+    var kwHtml = '';
+    for (var ki = 0; ki < t.keywords.length; ki++) {
+      kwHtml += '<span>' + t.keywords[ki] + '</span>';
+    }
+    area.innerHTML = ''
+      + '<div class="theme-header">'
+      + '<div class="theme-title">' + t.num + '　' + t.label + '</div>'
+      + '<div class="theme-desc">' + t.desc + '</div>'
+      + '</div>'
+
+      + '<div class="brand-info">'
+      + '<div class="info-card">'
+      + '<div class="info-row"><span class="info-label">品牌名称</span><span class="info-value">' + t.brandNameCn + '</span><span class="info-value en">' + t.brandNameEn + '</span></div>'
+      + '<div class="info-row"><span class="info-label">品牌行业</span><span class="info-value">' + t.industry + '</span></div>'
+      + '<div class="info-row"><span class="info-label">品牌定位</span><span class="info-value">' + t.positioning + '</span></div>'
+      + '<div class="info-row"><span class="info-label">品牌调性</span><div class="info-kw">' + kwHtml + '</div></div>'
+      + '<hr class="info-divider">'
+      + '<div class="info-intro">' + t.intro + '</div>'
+      + '<div class="info-slogan"><div class="cn">' + t.sloganCn + '</div><div class="en">' + t.sloganEn + '</div></div>'
+      + '</div>'
+      + '</div>';
+    return;
+  }
+
+  // Space section (card grid, same as OURS)
+  if (t.type === 'space') {
+    var html = ''
+      + '<div class="theme-header">'
+      + '<div class="theme-title">' + t.num + '　' + t.label + '</div>'
+      + '<div class="theme-desc">' + t.desc + '</div>'
+      + '</div>'
+      + '<div class="our-grid">';
+    for (var si = 0; si < t.spaceImages.length; si++) {
+      html += '<div class="our-card">'
+        + '<div class="img-wrap" data-img="' + t.spaceImages[si].img + '" data-info="空间与氛围 — 图片 ' + (si + 1) + '">'
+        + '<img src="' + t.spaceImages[si].img + '" alt="空间 ' + (si + 1) + '" loading="lazy" onerror="this.style.display=\'none\';">'
+        + '</div>'
+        + '</div>';
+    }
+    html += '</div>';
+    area.innerHTML = html;
+    return;
+  }
+
+  // Brand Tone special section
+  if (t.type === 'brand') {
+    var descParts = t.desc.split('\\n');
+    var descHtml = '';
+    for (var d = 0; d < descParts.length; d++) {
+      descHtml += '<p class="tone-desc-line">' + descParts[d] + '</p>';
+    }
+    var html = ''
+      + '<div class="theme-header">'
+      + '<div class="theme-title">' + t.num + '　' + t.label + '</div>'
+      + '<div class="theme-desc">' + descHtml + '</div>'
+      + '</div>'
+
+      + '<div class="brand-tone">'
+      + '<div class="our-grid">';
+    for (var mi = 0; mi < t.moodImages.length; mi++) {
+      html += '<div class="our-card">'
+        + '<div class="img-wrap" data-img="' + t.moodImages[mi] + '" data-info="情绪版 ' + (mi + 1) + '">'
+        + '<img src="' + t.moodImages[mi] + '" alt="情绪版 ' + (mi + 1) + '" loading="lazy" onerror="this.style.display=\'none\';">'
+        + '</div>'
+        + '</div>';
+    }
+    html += '</div>'
+      + '</div>';
+    area.innerHTML = html;
+    return;
+  }
+
+  // System images section (card grid, same as OURS, with labels)
+  if (t.systemImages) {
+    var html = ''
+      + '<div class="theme-header">'
+      + '<div class="theme-title">' + t.num + '　' + t.label + '</div>'
+      + '<div class="theme-desc">' + t.desc + '</div>'
+      + '</div>'
+      + '<div class="our-grid">';
+    for (var si = 0; si < t.systemImages.length; si++) {
+      html += '<div class="system-item">'
+        + '<div class="system-item-label">' + t.systemImages[si].label + '</div>'
+        + '<div class="our-card">'
+        + '<div class="img-wrap" data-img="' + t.systemImages[si].img + '" data-info="包装系统 — ' + t.systemImages[si].label + '">'
+        + '<img src="' + t.systemImages[si].img + '" alt="' + t.systemImages[si].label + '" loading="lazy" onerror="this.style.display=\'none\';">'
+        + '</div>'
+        + '</div>'
+        + '</div>';
+    }
+    html += '</div>';
+    area.innerHTML = html;
+    return;
+  }
+
+  // Build "Our Design" cards
+  var ourHtml = '';
+  for (var j = 0; j < t.ours.length; j++) {
+    var o = t.ours[j];
+    ourHtml += '<div class="our-card">'
+      + '<div class="img-wrap" data-img="' + o.img + '" data-info="秋山有度 — ' + o.title + '">'
+      + '<img src="' + o.img + '" alt="' + o.title + '" loading="lazy" onerror="this.style.display=\'none\'">'
+      + '</div>'
+      + '<div class="info"><div class="title">' + o.title + '</div><div class="sub">' + o.sub + '</div></div>'
+      + '</div>';
+  }
+
+  var area = document.getElementById('contentArea');
+  area.innerHTML = ''
+    + '<div class="theme-header">'
+    + '<div class="theme-title">' + t.num + '　' + t.label + '</div>'
+    + '<div class="theme-desc">' + t.desc + '</div>'
+    + '</div>'
+
+    + (t.overview ? '<div class="our-section">'
+      + '<div class="our-label"><div class="dot"></div><span>' + t.overview.label + '</span></div>'
+      + '<div class="our-grid"><div class="our-card">'
+      + '<div class="img-wrap" data-img="' + t.overview.img + '" data-info="' + t.overview.label + '">'
+      + '<img src="' + t.overview.img + '" alt="' + t.overview.label + '" loading="lazy" onerror="this.style.display=\'none\';">'
+      + '</div>'
+      + '</div></div>'
+      + '</div>' : '')
+    + '<div class="our-section">'
+    + '<div class="our-label"><div class="dot"></div><span>秋山 · 现有设计</span><div class="tag">OURS</div></div>'
+    + '<div class="our-grid">' + ourHtml + '</div>'
+    + '</div>'
+
+
+
+}
+
+// Delegated zoom handler for all images
+document.getElementById('contentArea').addEventListener('click', function(e) {
+  var target = e.target.closest('[data-img]');
+  if (!target) return;
+  document.getElementById('modalImg').src = target.dataset.img;
+  document.getElementById('modalInfo').textContent = target.dataset.info || '';
+  document.getElementById('modalOverlay').classList.add('active');
+});
+
+// Modal events
+document.getElementById('modalClose').addEventListener('click', function() {
+  document.getElementById('modalOverlay').classList.remove('active');
+});
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('active');
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('active');
+});
+
+// Init
+renderSidebar();
+renderTheme(themes[0].id);
+</script>
+</body>
+</html>
