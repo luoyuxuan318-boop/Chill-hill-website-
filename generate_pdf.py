@@ -113,6 +113,7 @@ print_css = '''
   /* ── Section Title Page (for major sections) ── */
   .section-title-page {
     page-break-before: always;
+    page-break-after: avoid;
     padding-top: 80px;
     margin-bottom: 36px;
   }
@@ -289,26 +290,30 @@ print_css = '''
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
     margin: 20px 0;
-    page-break-inside: avoid;
   }
   .img-card {
     background: #fff;
     border: 1.5px dashed #c4a97a;
     border-radius: 6px;
     overflow: hidden;
+    page-break-inside: avoid;
   }
   .img-card .img-wrap {
     width: 100%;
-    aspect-ratio: 4/3;
+    min-height: 140px;
+    max-height: 240px;
     background: linear-gradient(135deg, #f5f0e8, #ede6d8);
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
   }
   .img-card .img-wrap img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    max-height: 240px;
+    object-fit: contain;
+    display: block;
   }
   .img-card .img-info {
     padding: 10px 12px;
@@ -324,6 +329,46 @@ print_css = '''
     color: #6b5e4a;
     margin-top: 2px;
   }
+
+  /* ── Full-width large image (system diagrams, overviews) ── */
+  .img-full {
+    width: 100%;
+    margin: 16px 0 24px;
+    page-break-inside: avoid;
+  }
+  .img-full .img-wrap {
+    width: 100%;
+    min-height: 180px;
+    max-height: 420px;
+    background: linear-gradient(135deg, #f5f0e8, #ede6d8);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .img-full .img-wrap img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: contain;
+    display: block;
+  }
+  .img-full .img-info {
+    padding: 10px 4px 0;
+    text-align: center;
+  }
+  .img-full .img-info .title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2c2416;
+    letter-spacing: 2px;
+  }
+  .img-full .img-info .sub {
+    font-size: 10px;
+    color: #6b5e4a;
+    margin-top: 2px;
+  }
+
   .sys-label {
     font-size: 12px;
     color: #8b6f47;
@@ -338,6 +383,7 @@ print_css = '''
     align-items: center;
     gap: 10px;
     margin: 28px 0 16px;
+    page-break-after: avoid;
   }
   .section-subhead .dot {
     width: 7px;
@@ -433,6 +479,35 @@ def our_cards_html(items):
         </div>'''
     return f'<div class="section-subhead"><div class="dot"></div><span>秋山 · 现有设计</span><div class="tag">OURS</div></div><div class="img-grid">{cards}</div>'
 
+# Build full-width large images (for system diagrams, overviews, posters)
+def full_img_html(img_path, title='', sub=''):
+    info = ''
+    if title:
+        info = f'<div class="img-info"><div class="title">{title}</div>' + (f'<div class="sub">{sub}</div>' if sub else '') + '</div>'
+    return f'''
+    <div class="img-full">
+      <div class="img-wrap">
+        <img src="{img_path}" alt="{title}" loading="lazy">
+      </div>
+      {info}
+    </div>'''
+
+def full_img_grid_html(items):
+    cards = ''
+    for o in items:
+        cards += full_img_html(o['img'], o.get('title', ''), o.get('sub', ''))
+    return f'<div class="section-subhead"><div class="dot"></div><span>秋山 · 现有设计</span><div class="tag">OURS</div></div>{cards}'
+
+# Build mood board cards (no info labels, just images)
+def mood_grid_html(images):
+    cards = ''
+    for img in images:
+        cards += f'''
+        <div class="img-card">
+          <div class="img-wrap"><img src="{img}" alt="" loading="lazy"></div>
+        </div>'''
+    return f'<div class="img-grid">{cards}</div>'
+
 # ============================================================
 # Section data (extracted from the HTML)
 # ============================================================
@@ -459,12 +534,7 @@ sections_html += '''
 '''
 
 # ── Section 02: Brand Tone ──
-mood_cards = ''
-for i in range(1, 6):
-    mood_cards += f'''
-    <div class="img-card">
-      <div class="img-wrap"><img src="images/moodboard-{i:02d}.jpg" alt="情绪版 {i}" loading="lazy"></div>
-    </div>'''
+mood_images = [f'images/moodboard-{i:02d}.jpg' for i in range(1, 6)]
 
 sections_html += f'''
 <div class="page-break"></div>
@@ -484,18 +554,16 @@ sections_html += f'''
   <div class="tone-kws"><span>松弛感</span><span>克制</span><span>自然</span><span>温度</span><span>呼吸感</span><span>东方美学</span></div>
 </div>
 <div class="section-subhead"><div class="dot"></div><span>情绪版 / Mood Board</span></div>
-<div class="img-grid">{mood_cards}</div>
+{mood_grid_html(mood_images)}
 '''
 
 # ── Section 03: Packaging ──
-sys_cards = ''
-for i, label in enumerate([('系统一：简约设计感', 'packaging-system-01.jpg'), ('系统二：潮流设计感', 'packaging-system-02.jpg'), ('系统三：莫兰迪色极简版', 'packaging-system-03.jpg')]):
-    sys_cards += f'''
+sys_html = ''
+for label, fname in [('系统一：简约设计感', 'packaging-system-01.jpg'), ('系统二：潮流设计感', 'packaging-system-02.jpg'), ('系统三：莫兰迪色极简版', 'packaging-system-03.jpg')]:
+    sys_html += f'''
     <div class="avoid-break">
-      <div class="sys-label">{label[0]}</div>
-      <div class="img-card">
-        <div class="img-wrap"><img src="images/{label[1]}" alt="{label[0]}" loading="lazy"></div>
-      </div>
+      <div class="sys-label">{label}</div>
+      {full_img_html(f'images/{fname}', label)}
     </div>'''
 
 packaging_ours = [
@@ -513,7 +581,7 @@ sections_html += f'''
   <div class="section-desc">外带杯 · 打包袋 · 餐巾纸 · 杯套 · 封口贴 · 产品包装 —— 品牌触达顾客的第一层肌肤</div>
 </div>
 <div class="section-subhead"><div class="dot"></div><span>包装系统方案</span></div>
-<div class="img-grid">{sys_cards}</div>
+{sys_html}
 {our_cards_html(packaging_ours)}
 '''
 
@@ -552,11 +620,7 @@ merch_ours = [
 
 overview_html = f'''
 <div class="section-subhead"><div class="dot"></div><span>整体调性图</span></div>
-<div class="img-grid">
-  <div class="img-card">
-    <div class="img-wrap"><img src="images/merch-overview.jpg" alt="整体调性图" loading="lazy"></div>
-  </div>
-</div>'''
+{full_img_html('images/merch-overview.jpg', '整体调性图')}'''
 
 sections_html += f'''
 <div class="page-break"></div>
@@ -639,7 +703,7 @@ sections_html += f'''
   <div class="section-label">内容与传播</div>
   <div class="section-desc">宣发海报 · 私域活动 · 音乐演出 · 节庆限定 —— 品牌故事的每一次对外表达</div>
 </div>
-{our_cards_html(content_ours)}
+{full_img_grid_html(content_ours)}
 '''
 
 # ── Section 10: Photography ──
@@ -657,7 +721,7 @@ sections_html += f'''
   <div class="section-label">产品视觉</div>
   <div class="section-desc">产品拍摄风格 · 出品标准 · 视觉规范 —— 每一杯都值得被记录</div>
 </div>
-{our_cards_html(photo_ours)}
+{full_img_grid_html(photo_ours)}
 '''
 
 # ============================================================
